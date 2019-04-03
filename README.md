@@ -1,5 +1,5 @@
 # COL341: Assignment 1
-##Linear Regression
+## Linear Regression
 
 **Name**
 
