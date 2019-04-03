@@ -1,43 +1,55 @@
+# Importing required libraries
 import numpy as np
 import pandas as pd
 import sklearn.linear_model as lm
 import os
 import sys
 
-#location - C:\PG\Semester 5\COL341 - Machine Learning\Assignment 1\col341_a1
-
+# Train data filepath
 x_train_path = sys.argv[1]
 x_path = os.path.abspath(x_train_path)
 path_train = os.path.dirname(x_path)
 os.chdir(path_train)
 
+# Importing training data
 x_train = pd.read_csv(x_train_path, header = None, na_filter = False, dtype = np.float64, low_memory = False)
 
+# Test data filepath
 x_test_path = sys.argv[2]
 actual_path_x_test = os.path.abspath(x_test_path)
 path_test = os.path.dirname(actual_path_x_test)
 os.chdir(path_test)
 
+# Importing testing data
 x_test = pd.read_csv('msd_test.csv', header = None, na_filter = False, dtype = np.float64, low_memory = False)
 
+# Converting dataframe to numpy array
 x_train = x_train.values
 x_test = x_test.values
+
+# First column contains the output values
 y_test = list(x_test[:,0])
 y_train = list(x_train[:,0])
+
+# Setting first column as bias term
 x_test[:,0] = 1
 x_train[:,0] = 1
 
-
+# Non-correlated columns in dataset, using them for feature creation
 imp = [1, 2, 3, 5, 6, 8, 9, 10, 11, 13, 76, 85, 88]
 
+# Adding sequential product of each of those columns in dataset
+# Line (1,2), (2,3), (3,4)... and not (1,3), (1,4)...
 for i in range(len(imp)):
 	feature_train = x_train[:,imp[i]]*x_train[:,imp[(i+1)%len(imp)]]
 	feature_test = x_test[:,imp[i]]*x_test[:,imp[(i+1)%len(imp)]]	
 	x_train = np.column_stack((x_train, feature_train))
 	x_test = np.column_stack((x_test, feature_test))
 
+# New un-correlated column, adding it to dataset
 imp.append(104)
 
+# Adding square of each column
 for i in range(len(imp)):
 	feature_train = x_train[:,imp[i]]**2
 	feature_test = x_test[:,imp[i]]**2
