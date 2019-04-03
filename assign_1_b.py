@@ -19,6 +19,7 @@ actual_path_x_test = os.path.abspath(x_test_path)
 path_test = os.path.dirname(actual_path_x_test)
 os.chdir(path_test)
 
+# Importing testing data
 x_test = pd.read_csv('msd_test.csv', header = None, na_filter = False, dtype = np.float64, low_memory = False)
 
 # Converting dataframe to numpy array
